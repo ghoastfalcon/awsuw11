@@ -50,7 +50,11 @@
   </head>
   <body>
   	<div class="row full">
-        <div class="col-md-2 full" id="ux-bar">Test content</div>
+        <div class="col-md-2 full" id="ux-bar">
+<?php
+	include('uxbar.php');
+?>
+        </div>
         <div class="col-md-10 full">
         	<div id="map-canvas"></div>
         </div>
@@ -114,7 +118,7 @@
 					}
 				},
 				{
-					timeout: (2 * 1000),
+					timeout: (5 * 1000),
 					maximumAge: (1000 * 60 * 15),
 					enableHighAccuracy: true
 				}
