@@ -11,7 +11,7 @@
 
 	// for development. Set the protocol (http:// or https://) and domain of the static assets
 	$assetProto = '';
-	$assetDomain = '';
+	$assetDomain = 'assets';
 
 
 ?>
@@ -66,66 +66,11 @@
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="<?=$assetProto.$assetDomain?>/bootstrap/js/bootstrap.js"></script>
     <!-- Google Maps -->
-    <<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAPNqNLrWRSdshfgppSteYx_8qmO6lqtk4&sensor=<?=$hasGPS?>" type="text/javascript"></script>
-    <script type="text/javascript">
-    	// This is the location of the user we will attempt to use to initialize the map. Let's store a reference to it here so
-		// that it can be updated in several places.
-		var userLocation = null;
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAPNqNLrWRSdshfgppSteYx_8qmO6lqtk4&sensor=<?=$hasGPS?>" type="text/javascript"></script>
+    <script src="<?=$assetProto.$assetDomain?>/verse.js" type="text/javascript">
+    	
 
-		function initialize() {
-			if (userLocation) {
-				// user's location if we have it
-				var latitude = userLocation.latitude;
-				var longitude = userLocation.longitude;
-			}
-			else {
-				// downtown LA as a default
-				var latitude = 34.052234;
-				var longitude = -118.243685;
-			}
-			var mapOptions = {
-				zoom: 8,
-				center: new google.maps.LatLng(latitude, longitude),
-				mapTypeId: google.maps.MapTypeId.ROADMAP
-			};
-
-			var map = new google.maps.Map(document.getElementById('map-canvas'),mapOptions);
-		}
-
-		if (navigator.geolocation) {
-			// Get the location of the user's browser using the native geolocation service. When we invoke this method
-			// only the first callback is requied. The second callback - the error handler - and the third
-			// argument - our configuration options - are optional.
-			navigator.geolocation.getCurrentPosition(
-				function(position) {
-				 
-					// Check to see if there is already a location. There is a bug in FireFox where this gets
-					// invoked more than once with a cahced result.
-					if (userLocation) {
-						return userLocation;
-					}
-		 
-					// Add a marker to the map using the position.
-					userLocation = {
-						"latitude" : position.coords.latitude,
-						"longitude" : position.coords.longitude
-					};
-		 
-				},
-				function(error) {
-					if (console) {
-						console.log( "Something went wrong: ", error );
-					}
-				},
-				{
-					timeout: (5 * 1000),
-					maximumAge: (1000 * 60 * 15),
-					enableHighAccuracy: true
-				}
-			);
-		}
-
-		window.onload = initialize;
+		
 	</script>
   </body>
 </html>
