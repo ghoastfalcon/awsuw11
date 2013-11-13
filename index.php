@@ -1,6 +1,8 @@
 <?php
 	// mobile detection. This class allows for much more robust mobile testing if time it taken to impliment
 	require('Mobile_Detect.php');
+	require('Search.php');
+	
 	$detect = new Mobile_Detect;
 	if ($detect->isMobile()) {
 		$hasGPS = 'TRUE';
@@ -13,6 +15,12 @@
 	$assetProto = '';
 	$assetDomain = 'assets';
 
+	$lat=33.86;
+	$lng=-118.37;
+	$range=1609.0 * 1.0; // Range is in meeters, this is 10 miles
+
+	$search = new Search;
+	$agencies = $search->results( $lat, $lng, $range );
 
 ?>
 <!DOCTYPE html>
@@ -69,8 +77,6 @@
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAPNqNLrWRSdshfgppSteYx_8qmO6lqtk4&sensor=<?=$hasGPS?>" type="text/javascript"></script>
     <script src="<?=$assetProto.$assetDomain?>/verse.js" type="text/javascript">
     	
-
-		
 	</script>
   </body>
 </html>
