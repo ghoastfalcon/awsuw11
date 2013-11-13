@@ -1,72 +1,99 @@
-// potrait vs landscape min values
-var minNavHeight = 74;
-var minNavWidth = 200;
-// column ids
-var navDiv = 'ux-bar';
-var mapDiv = 'map-canvas';
-
 // This is the location of the user we will attempt to use to initialize the map. Let's store a reference to it here so
 // that it can be updated in several places.
 var userLocation = null;
 
-// global var for the google geocoder and dynamic map sizing
-var totalHeight, totalWidth, widthMode, resizeTimeout;
-var geocoder, mapWidth, mapHeight, navWidth, navHeight;
+// global var for the google geocoder
+var geocoder;
+var map;
 
 $(document).ready(function() {
-	setLayout();
+	
+	/*
+		geocoder = new google.maps.Geocoder();
 
-	$(window).resize(function() {
-		if (resizeTimeout) {
-			clearTimeout(resizeTimeout);
-		}
+		var startCenter = new google.maps.LatLng(34.052234,-118.243685);
+		var mapOptions = {
+			zoom: 8,
+			center: startCenter,
+			mapTypeId: google.maps.MapTypeId.ROADMAP
+		};
 
-		resizeTimeout = setTimeout(function() {
-			setLayout();
-			google.maps.event.trigger(map, "resize");
-			console.log('resize');
-		}, 300)
-	});
+		var map = new google.maps.Map(document.getElementById('map-canvas'),mapOptions);
+	*/
 
-	// instance a geocoder to allow users to set a ma center point via zipcode
-	geocoder = new google.maps.Geocoder();
+	// intialize the map
+	function initialize() {
+	  geocoder = new google.maps.Geocoder();
+	  var latlng = new google.maps.LatLng(34.052234,-118.243685);
+	  var mapOptions = {
+	    zoom: 8,
+	    center: latlng,
+	    mapTypeId: google.maps.MapTypeId.ROADMAP
+	  }
+	  map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+	}
 
-	var startCenter = new google.maps.LatLng(34.052234,-118.243685);
-	var mapOptions = {
-		zoom: 8,
-		center: startCenter,
-		mapTypeId: google.maps.MapTypeId.ROADMAP
-	};
+	// draw the map
+	google.maps.event.addDomListener(window, 'load', initialize);
 
-	var map = new google.maps.Map(document.getElementById('map-canvas'),mapOptions);
+
 });
 
-function setLayout() {
-	totalWidth = $(window).innerWidth();
-	totalHeight = $(window).innerHeight();
-
-	// narrow (portrait) mode
-	if (totalWidth <= 640) {
-		widthMode = "narrow";
-		mapWidth = totalWidth+'px';
-		mapHeight = (totalHeight - minNavHeight)+'px';;
-		navWidth = totalWidth+'px';
-		navHeight = minNavHeight+'px';
-	}
-	// wide mode
-	else {
-		widthMode = "wide";
-		mapWidth = (totalWidth - minNavWidth)+'px';
-		mapHeight = totalHeight+'px';
-		navWidth = minNavWidth+'px';
-		navHeight = totalHeight+'px';
-	}
-
-	// set div parameters
-	$('#'+navDiv).width(navWidth).height(navHeight);
-	$('#'+mapDiv).width(mapWidth).height(mapHeight);
+// this function will geocode the address based off of imput from the user
+function codeAddress() {
+		
+  var zipcode = document.getElementById('zipcode').value;
+  geocoder.geocode( { 'address': zipcode}, function(results, status) {
+    if (status == google.maps.GeocoderStatus.OK) {
+    	//console.log("geom info "+results[0].geometry.location);
+      var latLong = results[0].geometry.location
+      map.setCenter(latLong);
+      var marker = new google.maps.Marker({
+          map: map,
+          position: latLong
+      });
+    } else {
+      alert('Geocode was not successful for the following reason: ' + status);
+    }
+  });
 }
 
+
+$("#haveAccount").click(function(){
+	$("#haveAccount").addClass('hide');
+	$("#searchByDonerInput").removeClass('hide');
+});
+
+$("#searchByDonerInputGo").click(function(){
+	$("#searchByDonerInput").addClass('hide');
+	$("#welcomeBack").removeClass('hide');
+})
+
+// do the address/zipcode search
+$( "#zipcodeSearch" ).click(function() {
+	codeAddress();
+});
+
+
+
+
+
+$("#search").click(function() {
+
+	// filtered search will be called here
+
+});
+
+// clear the filters
+$("#clearFilters").click(function(){
+	$("clearFilters").attr("selected").clear;
+
+
+});
+
+//$("#e14_init").click(function() { $("#e14").select2(); });
+//$("#e14_destroy").click(function() { $("#e14").select2("destroy"); });
+   
 /*if (navigator.geolocation) {
 	// Get the location of the user's browser using the native geolocation service. When we invoke this method
 	// only the first callback is requied. The second callback - the error handler - and the third
