@@ -2,6 +2,9 @@
 // that it can be updated in several places.
 var centerPoint = null;
 
+var navDiv;
+var mapDiv;
+
 // global var for the google geocoder
 var geocoder;
 var map;
@@ -34,7 +37,7 @@ $(document).ready(function() {
 			center: centerPoint,
 			mapTypeId: google.maps.MapTypeId.ROADMAP
 		};
-		var map = new google.maps.Map(document.getElementById('map-canvas'),mapOptions);
+		map = new google.maps.Map(document.getElementById('map-canvas'),mapOptions);
 	});
 
 	function userLocation() {
