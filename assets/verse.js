@@ -2,8 +2,11 @@
 // that it can be updated in several places.
 var centerPoint = null;
 
-var navDiv;
-var mapDiv;
+var minNavHight = 74;
+var minNavWidth = 200;
+
+var navDiv = 'us-bar';
+var mapDiv = 'map-canvas';
 
 // global var for the google geocoder
 var geocoder;
@@ -67,16 +70,6 @@ $(document).ready(function() {
 
 });
 
-	
-
-
-});
-
-	// set div parameters
-	$('#'+navDiv).width(navWidth).height(navHeight);
-	$('#'+mapDiv).width(mapWidth).height(mapHeight);
-}
-
 // this function will geocode the address based off of imput from the user
 function codeAddress() {
 		
@@ -91,6 +84,33 @@ function codeAddress() {
       alert('Geocode was not successful for the following reason: ' + status);
     }
   });
+}
+
+
+function setLayout() {
+ totalWidth = $(window).innerWidth();
+ totalHeight = $(window).innerHeight();
+
+ // narrow (portrait) mode
+ if (totalWidth <= 640) {
+  widthMode = "narrow";
+  mapWidth = totalWidth+'px';
+  mapHeight = (totalHeight - minNavHeight)+'px';;
+  navWidth = totalWidth+'px';
+  navHeight = minNavHeight+'px';
+ }
+ // wide mode
+ else {
+  widthMode = "wide";
+  mapWidth = (totalWidth - minNavWidth)+'px';
+  mapHeight = totalHeight+'px';
+  navWidth = minNavWidth+'px';
+  navHeight = totalHeight+'px';
+ }
+
+ // set div parameters
+ $('#'+navDiv).width(navWidth).height(navHeight);
+ $('#'+mapDiv).width(mapWidth).height(mapHeight);
 }
 
 
@@ -119,6 +139,5 @@ $("#search").click(function() {
 // clear the filters
 $("#clearFilters").click(function(){
 	$("clearFilters").attr("selected").clear;
-
 
 });
